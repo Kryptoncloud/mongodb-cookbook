@@ -200,7 +200,8 @@ define :mongodb_instance,
 
   # service
   service new_resource.name do
-    provider Chef::Provider::Service::Upstart if node['mongodb']['apt_repo'] == 'ubuntu-upstart'
+    Chef::Log.info("******* apt_repo = #{node['mongodb']['apt_repo']} and Ubuntu version is #{node['platform_version']}")
+    provider Chef::Provider::Service::Systemd if node['mongodb']['apt_repo'] == 'ubuntu-upstart'
     supports :status => true, :restart => true
     action new_resource.service_action
     new_resource.service_notifies.each do |service_notify|
